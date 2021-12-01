@@ -65,11 +65,11 @@ global propIdforuse
 showPriceNumber = "1"
 wm_latitude =1.0
 wm_longitude=1.0
-token ="v1xy6T9m0yhdws92gvkYNCNLAZgAAAAAAw8AAEnUvgcEWmcGpO8I_zlDWr5J5C1VpyS-GBbfSVEcV3yZgMTzzdauJHfGq5ZLPAKjnw"
+token = ""
 propId=1
 exchangeCoinNumber=1.0
 serverkey=""
-pushPlusToken = "4d2717a4dbfd4bcf97ce78d8a14a12a5"
+pushPlusToken = ""
 yesornot = ""
 yesornot2 = ""
 propIdforuse =2
