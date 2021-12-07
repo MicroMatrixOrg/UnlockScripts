@@ -43,3 +43,10 @@ http://a.app.qq.com/o/simple.jsp?ctx=1636797108749&pkgname=com.xiangzi.jukandian
 ### 聚看点
 export jkdhd='{"openid": "填入刚才复制的内容"}' 
 export jkdck='{"Cookie":"xz_jkd_appkey=填入刚才复制的内容"}'
+
+
+
+##滴滴果园
+小程序进入滴滴果园，首页，5天水果
+抓包
+https://game.xiaojukeji.com/api/game/mission/get?... """整条url
