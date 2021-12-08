@@ -1,4 +1,32 @@
-const $ = new Env('柠檬九章头条');
+
+/*
+下载地址：
+APP商店 九章头条
+
+使用方法
+获取数据打开APP即可获取
+一天预算2块的样子 
+邀请的别邀请多了容易封号
+========青龙===========
+ql raw https://gitee.com/xiecoll/radish-script/raw/master/jzread.js
+变量为jzreadurl多账号用@隔开
+export jzreadurl='https://api.st615.com/v1/user/info?token=抓包的token'
+自行抓包替换 关键字为token 抓包的token
+提现变量为cashtx
+面额为0.3 2 5 30 50 100
+新账号提现改为export cashtx='0.3'
+
+========isQuanX=========
+[rewrite_local]
+https://api.st615.com/v1/user/info\?token=\S+ url script-request-header https://gitee.com/xiecoll/radish-script/raw/master/jzread.js
+
+hostname = api.st615.com
+*/
+
+// [task_local]
+// */60 * * * * https://gitee.com/xiecoll/radish-script/raw/master/jzread.js, tag=九章头条, img-url=circles.hexagongrid.fill.system, enabled=true
+
+const $ = new Env('九章头条');
 let status;
 status = (status = ($.getval("jzreadstatus") || "1") ) > 1 ? `${status}` : ""; // 账号扩展字符
 let jzreadurlArr = [],jzreadcount = ''
@@ -6,6 +34,10 @@ let jzreadurl= $.isNode() ? (process.env.jzreadurl ? process.env.jzreadurl : "")
 let cashtx= $.isNode() ? (process.env.cashtx ? process.env.cashtx : "") : ($.getdata('cashtx') ? $.getdata('cashtx') : "")
 let jzreadurls = ""
 const logs =0;
+
+var hours = new Date().getHours();
+var s = new Date().getMinutes();
+
 var timestamp = Math.round(new Date().getTime()/1000).toString();
 !(async () => {
   if (typeof $request !== "undefined") {
@@ -27,6 +59,9 @@ var timestamp = Math.round(new Date().getTime()/1000).toString();
 
      await benefit()
        await clock()
+       await share()
+       await share()
+       await share()
        await cashads()
        await info()
        await doublesign()
@@ -38,9 +73,8 @@ var timestamp = Math.round(new Date().getTime()/1000).toString();
        await doads(11)
        await doads(77)
        await getbenefit()
-       await getreadlist()
-       await videolist()
-       await info()
+
+       //await info()
 
 
   }
@@ -66,6 +100,9 @@ var timestamp = Math.round(new Date().getTime()/1000).toString();
 
        await benefit()
        await clock()
+       await share()
+       await share()
+       await share()
        await cashads()
        await info()
        await doublesign()
@@ -77,18 +114,8 @@ var timestamp = Math.round(new Date().getTime()/1000).toString();
        await doads(11)
        await doads(77)
        await getbenefit()
-       await getreadlist()
-                     await share(readlist[1].id)
-              await $.wait(1000)
-              await share(readlist[2].id)
-              await $.wait(1000)
-              await share(readlist[3].id)
-              await $.wait(1000)
-              await share(readlist[4].id)
-              await $.wait(1000)
-              await share(readlist[5].id)
-       await getvideo()
-       await info()
+
+      // await info()
 	        }
       }
   }
@@ -252,7 +279,11 @@ async function info(){
         if(result.code == 0)
           $.log("invite_code："+result.data['invite_code']+"\nmy coin："+result.data.integral+"\nwork_money："+result.data['work_money']+"\nmoney："+result.data.money)
     if(result.data.money>cashtx){
+        $.log('现在时间为：'+hours+":"+s)
+        if(hours >= 9){
         await cash(cashtx)
+            
+        }else {$.log("现在没到9点不能提现\n每日自动0.3")}
     }
        if(result.code != 0)
           
@@ -517,7 +548,7 @@ async function doads(id){
    })
   }
   
-  async function share(id){
+  async function share(){
  return new Promise((resolve) => {
 
    
@@ -525,7 +556,7 @@ async function doads(id){
 
     let nm = {
      url: `https://api.st615.com/v1/article/share`,
-     body:  `device=iPhone%208%20Plus&id=${id}&os=14.4&source=article&token=`+token,
+     body:  `device=iPhone%208%20Plus&id=&os=14.4&source=article&token=`+token,
             headers:{
 'Host': 'api.st615.com',
 'Content-Type':' application/x-www-form-urlencoded; charset=utf-8',
@@ -593,7 +624,7 @@ async function doads(id){
     })
    })
   }
-  async function cash(money){
+  async function cash(){
  return new Promise((resolve) => {
 
    
@@ -601,7 +632,7 @@ async function doads(id){
 
     let nm = {
      url: `https://api.st615.com/v1/cash/withdraw-new`,
-     body:  `token=${token}&type=1&money=${money}`,
+     body:  `token=${token}&type=1&money=0.3`,
            headers:{
 'Host': 'api.st615.com',
 'Content-Type':' application/x-www-form-urlencoded; charset=utf-8',
