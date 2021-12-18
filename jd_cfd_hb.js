@@ -100,8 +100,8 @@ async function cfd () {
       }
     }
 
-    await $.wait(2000)
-    await exchangeState()
+//     await $.wait(2000)
+//     await exchangeState()
 
   } catch (e) {
     $.logErr(e)
