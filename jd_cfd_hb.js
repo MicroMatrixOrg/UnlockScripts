@@ -21,7 +21,7 @@ cron "45 * * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd
 ============小火箭=========
 京喜财富岛合成生鲜 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_cfd_fresh.js, cronexpr="45 * * * *", timeout=3600, enable=true
  */
-const $ = new Env("京喜财富岛合成生鲜");
+const $ = new Env("京喜财富岛红包");
 const JD_API_HOST = "https://m.jingxi.com/";
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
@@ -100,8 +100,8 @@ async function cfd () {
       }
     }
 
-//     await $.wait(2000)
-//     await exchangeState()
+    await $.wait(2000)
+    await exchangeState()
 
   } catch (e) {
     $.logErr(e)
