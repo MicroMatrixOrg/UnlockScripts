@@ -51,7 +51,7 @@ if ($.isNode()) {
   $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
   await requestAlgo();
   await $.wait(1000)
-  for (let i = 0; i < cookiesArr.length; i++) {
+  for (let i = 0; i < 1; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
       $.cookie = cookie;
@@ -111,7 +111,18 @@ async function cfd () {
 function exchangeState () {
   return new Promise((resolve, reject) => {
     $.get(taskUrl(`jxbfd/user/ExchangeState`, `dwType=2`), async (err, resp, data) => {
-
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} QueryUserInfo API请求失败，请检查网路重试`)
+        }
+        console.log(resp);
+        console.log(data);
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve();
+      }
     })
   })
 }
