@@ -624,7 +624,7 @@ async function doads(id){
     })
    })
   }
-  async function cash(){
+  async function cash(cashNum){
  return new Promise((resolve) => {
 
    
@@ -632,7 +632,7 @@ async function doads(id){
 
     let nm = {
      url: `https://api.st615.com/v1/cash/withdraw-new`,
-     body:  `token=${token}&type=1&money=0.3`,
+     body:  `token=${token}&type=1&money=${cashNum}`,
            headers:{
 'Host': 'api.st615.com',
 'Content-Type':' application/x-www-form-urlencoded; charset=utf-8',
