@@ -8,6 +8,8 @@ cron: 0 6 */3 * *
 new Env('京东全自动评价');
 '''
 
+##晒单可能会出现JSON解析到BUG，解决找到python安装地址，cd /usr/lib/python3.9/site-packages/requests 里面的models.py 修改body = Complexjson.dumps(json) -> body = complexjson.dumps(json, separators=(',', ':'), ensure_ascii=False)
+
 ################【参数】######################
 # [填写您要批量评价的范围]  ENV设置： export Ev_Scope='1,2,4-5'
 #  目前只支持逗号(,)和减号(-),默认只评价前3个(1-3)
@@ -499,7 +501,7 @@ def start():
         printf('评价与服务完成！！\n')
 
         printf('开始晒单！')
-        sunbw(headers, f'账号{i}[{user}]')
+        # sunbw(headers, f'账号{i}[{user}]')
         printf('晒单完成！！。等待10秒开始下一个账号\n')
         time.sleep(10)
     msg = ''
