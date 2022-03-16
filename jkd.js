@@ -1,17 +1,29 @@
 /*
-变量
-export jkdhd='{"openid": "替换的CK"}' 同CK 后面不需要!iOS!5.6.5
+ä¸‹è½½åœ°å€
+http://a.app.qq.com/o/simple.jsp?pkgname=com.xiangzi.jukandian&ckey=CK1416436838701
+[rewrite_local]
+https://www.xiaodouzhuan.cn/jkd/user/userlive.action url script-request-body http://ios.re/scripts/jkd.js
 
-export jkdck='{"Cookie":"xz_jkd_appkey=替换的CK"}'
+hostname = *.xiaodouzhuan.cn
+##ç‚¹ä»»åŠ¡èŽ·å–æ•°æ®##
+===========ql===========
+æ‹‰å–
+ql raw http://ios.re/scripts/jkd.js
+å˜é‡
+export jkdhd='{"openid": "æ›¿æ¢çš„CK"}' 
+export jkdck='{"Cookie":"xz_jkd_appkey=æ›¿æ¢çš„CK"}'
 
-多账号用@隔开
+æ„Ÿå¹å·åŽé¢çš„ä¸éœ€è¦ï¼Œä¾‹å¦‚
+19fa3945xxx045f0bdf021160311fdb4!android!7
+19fa3945xxx045f0bdf111160311fdb4!iOS!5.6.5
+å¤šè´¦å·ç”¨@éš”å¼€
 */
 // [task_local]
-// */60 * * * * http://47.101.146.160/scripts/jkd.js, tag=聚看点, img-url=circles.hexagongrid.fill.system, enabled=true
+// */60 * * * * http://ios.re/scripts/jkd.js, tag=èšçœ‹ç‚¹, img-url=circles.hexagongrid.fill.system, enabled=true
 
-const $ = new Env('聚看点');
+const $ = new Env('èšçœ‹ç‚¹');
 let status;
-status = (status = ($.getval("jkdstatus") || "1") ) > 1 ? `${status}` : ""; // 账号扩展字符
+status = (status = ($.getval("jkdstatus") || "1") ) > 1 ? `${status}` : ""; // è´¦å·æ‰©å±•å­—ç¬¦
 let jkdhdArr = [],jkdckArr = [],jzreadcount = ''
 let jkdhd= $.isNode() ? (process.env.jkdhd ? process.env.jkdhd : "") : ($.getdata('jkdhd') ? $.getdata('jkdhd') : "")
 let jkdck= $.isNode() ? (process.env.jkdck ? process.env.jkdck : "") : ($.getdata('jkdck') ? $.getdata('jkdck') : "")
@@ -35,14 +47,14 @@ var timestamp = Math.round(new Date().getTime()/1000).toString();
             jkdhdArr.push($.getdata(`jkdhd${i}`))
             jkdckArr.push($.getdata(`jkdck${i}`))
             }
-    console.log(`------------- 共${jkdhdArr.length}个账号-------------\n`)
+    console.log(`------------- å…±${jkdhdArr.length}ä¸ªè´¦å·-------------\n`)
       for (let i = 0; i < jkdhdArr.length; i++) {
         if (jkdhdArr[i]) {
           jkdhd = jkdhdArr[i];
           jkdck = jkdckArr[i]
           $.index = i + 1;
         
-          console.log(`\n开始【聚看点${$.index}】`)
+          console.log(`\nå¼€å§‹ã€èšçœ‹ç‚¹${$.index}ã€‘`)
 
 await qx()
 
@@ -54,7 +66,7 @@ await qx()
           if (process.env.jkdhd && process.env.jkdhd.indexOf('@') > -1) {
             jkdhdArr = process.env.jkdhd.split('@');
             jkdckArr = process.env.jkdck.split('@');
-            console.log(`您选择的是用"@"隔开\n`)
+            console.log(`æ‚¨é€‰æ‹©çš„æ˜¯ç”¨"@"éš”å¼€\n`)
         } else {
             jkdhds = [process.env.jkdhd]
             jkdcks = [process.env.jkdck]
@@ -69,13 +81,13 @@ await qx()
             jkdckArr.push(jkdcks[item])
         }
     })
-          console.log(`共${jkdhdArr.length}个cookie`)
+          console.log(`å…±${jkdhdArr.length}ä¸ªcookie`)
 	        for (let k = 0; k < jkdhdArr.length; k++) {
                 $.message = ""
                 jkdhd = jkdhdArr[k]
                 jkdck = jkdckArr[k]
                 $.index = k + 1;
-          console.log(`\n开始【聚看点${$.index}】`)
+          console.log(`\nå¼€å§‹ã€èšçœ‹ç‚¹${$.index}ã€‘`)
           //$.log(jkdhd)
 await ql()
 	        }
@@ -96,7 +108,7 @@ if(jkdck)    $.setdata(jkdck,`jkdck${status}`)
 $.log(jkdhd)
 $.log(jkdck)
 
-   $.msg($.name,"",'聚看点'+`${status}` +'数据获取成功！')
+   $.msg($.name,"",'èšçœ‹ç‚¹'+`${status}` +'æ•°æ®èŽ·å–æˆåŠŸï¼')
  
 }
 }
@@ -119,7 +131,7 @@ await qxartlist()}
 }
 
 async function ql(){
-
+await bindTeacher()
 await qlinfo()
 await getMoneyTree()
 await qlstimulateAdvAccount(17)  
@@ -166,7 +178,35 @@ qxhd = jkdhd.match(/jsondata=(.+)/)[1]
     })
    })
   }
+async function bindTeacher(){
+ return new Promise((resolve) => {
+qlhd = JSON.parse(jkdhd)
 
+    let nm = {
+     url: `https://www.xiaodouzhuan.cn/jkd/user/bindTeacher.action`,
+     body: `jsondata={  "openid" : "${qlhd.openid}",  "os" : "iOS",  "psign" : "0cf94b87f584dfc81a87fa74dcb3757f",  "channel" : "IOS-qianzhuan",  "appversioncode" : "6006",  "time" : "1641268716",  "appversion" : "60.0.6",  "apptoken" : "xzwltoken070704",  "appid" : "xzwl",  "upUsercode" : "24516198"}`,
+     headers:{
+'Host': 'www.xiaodouzhuan.cn',
+'Content-Type': 'application/x-www-form-urlencoded',
+'User-Agent': 'JuKanDian/5.6.5 (iPhone; iOS 14.3; Scale/3.00)',
+}
+        
+    }
+   $.post(nm,async(error, response, data) =>{
+    try{
+        //const result = JSON.parse(data)
+        if(logs)$.log(data)
+
+          
+        }catch(e) {
+          $.logErr(e, response);
+      } finally {
+        resolve();
+      } 
+    })
+   })
+  }
+  
 async function qlinfo(){
  return new Promise((resolve) => {
 qlhd = JSON.parse(jkdhd)
