@@ -1,3 +1,4 @@
+const $ = new Env('上海大学签到');
 const puppeteer = require(`puppeteer`);
 const axios = require(`axios`);
 (async () => {
