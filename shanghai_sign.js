@@ -1,8 +1,8 @@
 const puppeteer = require(`puppeteer`);
 const axios = require(`axios`);
 (async () => {
-  const browser = await puppeteer.launch({ devtools: true });
-  // const browser = await puppeteer.launch();
+  // const browser = await puppeteer.launch({ devtools: true });
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
   const sendMessage = (content) => {
     axios.get(`http://www.pushplus.plus/send`, { params: { token: `4d2717a4dbfd4bcf97ce78d8a14a12a5`, title: `填写失败`, content: content, } })
