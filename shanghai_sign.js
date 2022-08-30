@@ -5,7 +5,7 @@ function Env(t,e){"undefined"!=typeof process&&JSON.stringify(process.env).index
 
 (async () => {
   // const browser = await puppeteer.launch({ devtools: true });
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ executablePath: '/usr/bin/chromium-browser', args: [ '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote' ] });
   const page = await browser.newPage();
   const sendMessage = (content) => {
     axios.get(`http://www.pushplus.plus/send`, { params: { token: `4d2717a4dbfd4bcf97ce78d8a14a12a5`, title: `填写失败`, content: content, } })
@@ -133,7 +133,7 @@ function Env(t,e){"undefined"!=typeof process&&JSON.stringify(process.env).index
   }
   await login();
 
-  let dayReport = () => {
+   let dayReport = () => {
     return new Promise(async (resolve, reject) => {
       // 每日一报
       const lbReport = await page.$(`a#lnkReport`);
@@ -175,8 +175,16 @@ function Env(t,e){"undefined"!=typeof process&&JSON.stringify(process.env).index
           await normalizeA.click()
         }
       } else {
+        if (page.url().includes("JiaoZGJCSQ_List.aspx")) {
+          await page.waitForSelector("a[id=p1_ctl00]").then(async () => {
+            const toSouthDoor = await page.$("a[id=p1_ctl00]")
+            await toSouthDoor.click()
+            await southDoor()
+          })
+        } else if (page.url().includes("/JiaoZGJCSQ.aspx")) {
+          await southDoor()
 
-        await southDoor()
+        }
       }
       resolve(true);
     })
