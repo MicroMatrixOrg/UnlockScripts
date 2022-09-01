@@ -48,9 +48,6 @@ const dayReportFun = async (page) => {
 }
 
 let southDoor = async (page) => {
-  await page.waitForNavigation({
-    waitUntil: `load`,
-  })
   // 常态化申请
   const permissionB1 = await page.$('input#persinfo_XiZhi-inputEl')
   await permissionB1.evaluate(b => b.click())
@@ -167,17 +164,6 @@ let dayReport = (page) => {
       if (normalizeA) {
         await normalizeA.click()
       }
-    } else {
-      if (page.url().includes("JiaoZGJCSQ_List.aspx")) {
-        await page.waitForSelector("a[id=p1_ctl00]").then(async () => {
-          const toSouthDoor = await page.$("a[id=p1_ctl00]")
-          await toSouthDoor.click()
-          await southDoor(page)
-        })
-      } else if (page.url().includes("/JiaoZGJCSQ.aspx")) {
-        await southDoor(page)
-
-      }
     }
     resolve(true);
   })
@@ -185,22 +171,41 @@ let dayReport = (page) => {
 
 let main = async () => {
   const $ = new Env('上海大学签到');
-  let accounts = process.env.signAccount.split(",")
+  // let accounts = process.env.signAccount.split(",")
+  let accounts = "k1000342&SHhy123456".split(",")
+  let msg = ""
   for (let i = 0; i < accounts.length; i++) {
     let temAccount = accounts[i].split("&")
     let username = temAccount[0];
     let password = temAccount[1];
-    const browser = await puppeteer.launch({ executablePath: '/usr/bin/chromium-browser', args: [ '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote' ] });
-    // const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({ devtools: true });
+    // const browser = await puppeteer.launch({ executablePath: '/usr/bin/chromium-browser', args: [ '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote' ] });
     const page = await browser.newPage();
-    console.log(`${username}正在上报`)
+    console.log("开始签到", username)
     await login(page, username, password);
     // 进入每日一报
-    await dayReport(page);
-    console.log(`${username}上报成功`)
+    let result = await dayReport(page);
+    if (result) {
+      await page.waitForNavigation({
+        waitUntil: `load`,
+      })
+      if (page.url().includes("JiaoZGJCSQ_List.aspx")) {
+        await page.waitForSelector("a[id=p1_ctl00]").then(async () => {
+          const toSouthDoor = await page.$("a[id=p1_ctl00]")
+          await toSouthDoor.click()
+          await page.waitForNavigation({
+            waitUntil: `load`,
+          })
+          await southDoor(page)
+        })
+      } else if (page.url().includes("/JiaoZGJCSQ.aspx")) {
+        await southDoor(page)
+      }
+      msg += `${username}上报成功 \n`
+      console.log(`${username}上报成功`)
+    }
     sendMessage("上报成功", `${username}上报成功`)
     await browser.close();
   }
 }
 main()
-
