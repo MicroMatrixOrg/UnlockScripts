@@ -110,6 +110,7 @@ function populateUrlObject (url, token, body = '') {
 async function main () {
   for (let i = 0; i < tokenList.length; i++) {
     let token = tokenList[i]
+    console.log(token);
     await sign(token);
     await traceEvent(token, "type=page_view&trace_value=%23%2Fpages%2Frewardshop%2Findex&trace_detail=%E7%A7%AF%E5%88%86%E5%95%86%E5%9F%8E%E9%A1%B5%E9%9D%A2");
     await exchangeFigt(token)
