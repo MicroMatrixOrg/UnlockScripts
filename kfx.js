@@ -12,7 +12,7 @@ function sign (token) {
     let urlObject = populateUrlObject(url, token, body)
     await httpRequest('post', urlObject)
     let result = httpResult;
-    console.log(result.msg)
+    console.log(result ? result.msg : "")
     resolve(true)
   })
 }
@@ -24,7 +24,7 @@ function traceEvent (token, body) {
     let urlObject = populateUrlObject(url, token, body)
     await httpRequest('post', urlObject)
     let result = httpResult;
-    console.log(result.msg)
+    console.log(result ? result.msg : "")
     resolve(true)
   })
 }
@@ -35,7 +35,7 @@ function exchangeFigt (token) {
     let urlObject = populateUrlObject(url, token, body)
     await httpRequest('post', urlObject)
     let result = httpResult;
-    console.log(result.msg)
+    console.log(result ? result.msg : "")
     resolve(true)
   })
 }
