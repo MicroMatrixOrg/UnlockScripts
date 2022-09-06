@@ -101,8 +101,19 @@ const getReportList = async (page) => {
   await page.waitForNavigation({
     waitUntil: `load`,
   })
-  let reportList = await page.$$eval(`a[href]`, items => items.map(item => item.href));
-  let willReportList = reportList.splice(-1)
+  let reportList = await page.$$eval(`a[href]`, items => {
+    let href = []
+    for (let i = 0; i < items.length; i++) {
+      if (i < 14 && items[i].innerText.includes("未填报")) {
+        href.push(items[i].href)
+      }
+      if (i == 14) {
+        break;
+      }
+    }
+    return href;
+  });
+  let willReportList = [...reportList]
   for (let i = willReportList.length - 1; i >= 0; i--) {
     const newPage = await browser.newPage();
     await newPage.goto(willReportList[i]).then(async () => {
