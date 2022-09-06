@@ -185,8 +185,8 @@ let main = async () => {
     let temAccount = accounts[i].split("&")
     let username = temAccount[0];
     let password = temAccount[1];
-    const browser = await puppeteer.launch({ devtools: true });
-    // const browser = await puppeteer.launch({ executablePath: '/usr/bin/chromium-browser', args: [ '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote' ] });
+//     const browser = await puppeteer.launch({ devtools: true });
+    const browser = await puppeteer.launch({ executablePath: '/usr/bin/chromium-browser', args: [ '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote' ] });
     const page = await browser.newPage();
     console.log("开始签到", username)
     await login(page, username, password);
