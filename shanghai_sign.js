@@ -51,12 +51,19 @@ let southDoor = async (page) => {
   // 常态化申请
   const permissionB1 = await page.$('input#persinfo_XiZhi-inputEl')
   await permissionB1.evaluate(b => b.click())
-  const permissionB2 = await page.$('input#persinfo_ChengNuo1-inputEl')
-  await permissionB2.evaluate(b => b.click())
-  const permissionB3 = await page.$('input#persinfo_ChengNuo2-inputEl')
-  await permissionB3.evaluate(b => b.click())
-  const permissionB4 = await page.$('input#persinfo_ChengNuo3-inputEl')
-  await permissionB4.evaluate(b => b.click())
+  const otherPermissionBtns = await page.$$eval("input[id^=persinfo_ChengNuo]", doms => {
+    let visibleDoms = [];
+    for (let i = 0; i < doms.length; i++) {
+      let domRect = doms[i].getBoundingClientRect()
+      if (domRect.x == 0 && domRect.y == 0 && domRect.width == 0 && domRect.height == 0) {
+
+      } else {
+        doms[i].click()
+        visibleDoms.push(doms[i])
+      }
+    }
+    return visibleDoms
+  })
   const copyA = await page.$('a#persinfo_ctl01_btnCopy')
   await copyA.evaluate(b => b.click())
   await page.waitForSelector(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`).then(async () => {
