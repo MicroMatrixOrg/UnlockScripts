@@ -178,8 +178,7 @@ let dayReport = (page) => {
 
 let main = async () => {
   const $ = new Env('上海大学签到');
-  // let accounts = process.env.signAccount.split(",")
-  let accounts = "k1000342&SHhy123456".split(",")
+  let accounts = process.env.signAccount.split(",")
   let msg = ""
   for (let i = 0; i < accounts.length; i++) {
     let temAccount = accounts[i].split("&")
