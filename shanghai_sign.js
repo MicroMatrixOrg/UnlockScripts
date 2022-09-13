@@ -154,7 +154,7 @@ let dayReport = (page) => {
   return new Promise(async (resolve, reject) => {
     // 每日一报
     const lbReport = await page.$(`a#lnkReport`);
-    await lbReport.click();
+    lbReport ? await lbReport.click() : false;
 
     await page.waitForNavigation({
       waitUntil: `load`,
