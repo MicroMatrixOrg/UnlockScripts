@@ -6,6 +6,16 @@ const sendMessage = (title = "填写失败", content) => {
   axios.get(`http://www.pushplus.plus/send`, { params: { token: `4d2717a4dbfd4bcf97ce78d8a14a12a5`, title: title, content: content, } })
 }
 
+async function handleSubmit (page) {
+  await page.$$eval(`a[role='button']`, divs => {
+    for (let i = 0; i < divs.length; i++) {
+      if (divs[i].innerText === "确定") {
+        return divs[i].click();
+      }
+    }
+  })
+}
+
 // 每日一报实际脚本
 const dayReportFun = async (page) => {
 
@@ -34,13 +44,12 @@ const dayReportFun = async (page) => {
     // 点击确定
     const submitReportBtn = await page.$(`a#p1_ctl01_btnSubmit`)
     await submitReportBtn.click();
-    await page.waitForSelector(`a#fineui_39`)
-    const subAlert = await page.$(`a#fineui_39`)
-    await subAlert.evaluate(b => b.click());
+    await page.waitForSelector(`div.f-messagebox-confirm`)
+    await handleSubmit(page)
 
-    await page.waitForSelector(`a#fineui_44`)
-    const subConfirm = await page.$(`a#fineui_44`)
-    await subConfirm.evaluate(b => b.click());
+
+    await page.waitForSelector(`div.f-messagebox-alert`)
+    await handleSubmit(page)
   })
   // return new Promise(async (resolve) => {
   //   resolve(true)
