@@ -213,6 +213,9 @@ let main = async () => {
     let result = await dayReport(page);
     if (result) {
       if (page.url().includes("JiaoZGJCSQ_List.aspx")) {
+        await page.waitForNavigation({
+           waitUntil: `load`,
+        })
         await page.waitForSelector("a[id=p1_ctl00]").then(async () => {
           const toSouthDoor = await page.$("a[id=p1_ctl00]")
           await toSouthDoor.click()
