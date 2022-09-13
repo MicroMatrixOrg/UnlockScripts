@@ -212,9 +212,6 @@ let main = async () => {
     // 进入每日一报
     let result = await dayReport(page);
     if (result) {
-      await page.waitForNavigation({
-        waitUntil: `load`,
-      })
       if (page.url().includes("JiaoZGJCSQ_List.aspx")) {
         await page.waitForSelector("a[id=p1_ctl00]").then(async () => {
           const toSouthDoor = await page.$("a[id=p1_ctl00]")
