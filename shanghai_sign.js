@@ -106,7 +106,7 @@ let southDoor = async (page) => {
 
 }
 
-const getReportList = async (page) => {
+const getReportList = async (page,browser) => {
   await page.waitForNavigation({
     waitUntil: `load`,
   })
@@ -175,7 +175,7 @@ let dayReport = (page) => {
       await page.waitForSelector(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`).then(async () => {
         const alertBtns = await page.$$(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`)
         await alertBtns[1].click();
-        getReportList(page)
+        await getReportList(page,browser)
       })
 
     } else {
@@ -210,12 +210,9 @@ let main = async () => {
     console.log("开始签到", username)
     await login(page, username, password);
     // 进入每日一报
-    let result = await dayReport(page);
+    let result = await dayReport(page,browser);
     if (result) {
       if (page.url().includes("JiaoZGJCSQ_List.aspx")) {
-        await page.waitForNavigation({
-           waitUntil: `load`,
-        })
         await page.waitForSelector("a[id=p1_ctl00]").then(async () => {
           const toSouthDoor = await page.$("a[id=p1_ctl00]")
           await toSouthDoor.click()
