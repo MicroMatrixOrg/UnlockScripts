@@ -23,22 +23,28 @@ const dayReportFun = async (page) => {
 
   const promiseBtn = await page.$(`input#p1_ChengNuo-inputEl`);
   await promiseBtn.evaluate(b => b.click());
-  const inShangHaiBtn = await page.$(`input#fineui_7-inputEl`)
+
+  const is7DaysInSH = await page.$(`input#fineui_1-inputEl`);
+  await is7DaysInSH.evaluate(b => b.click());
+
+  const inShangHaiBtn = await page.$(`input[value=在上海（校内）]`)
   await inShangHaiBtn.evaluate(b => b.click());
 
-  const needGoSchoolBtn = await page.$(`input#fineui_22-inputEl`)
+  const needGoSchoolBtn = await page.$(`input[name='p1$JinChuSQ'][value='1']`)
   await needGoSchoolBtn.evaluate(b => b.click())
-  const riskArea = await page.$(`input#fineui_26-inputEl`)
+
+  const riskArea = await page.$(`input[name='p1$GaoZDFXLJS'][value=无]`)
   await riskArea.evaluate(b => b.click());
+
   const contiguityBtn = await page.$(`input#fineui_31-inputEl`)
   await contiguityBtn.evaluate(b => b.click())
   const quarantineBtn = await page.$(`input#fineui_33-inputEl`)
   await quarantineBtn.evaluate(b => b.click())
 
 
-  await page.waitForSelector(`input#fineui_11-inputEl`, { visible: true }).then(async () => {
+  await page.waitForSelector(`input[value=在上海（校内）]`, { visible: true }).then(async () => {
 
-    const schoolAreaName = await page.$(`input#fineui_11-inputEl`)
+    const schoolAreaName = await page.$(`input[value=在上海（校内）]`)
     await schoolAreaName.evaluate(b => { if (!b.checked) b.click() });
 
     // 点击确定
@@ -50,17 +56,19 @@ const dayReportFun = async (page) => {
 
     await page.waitForSelector(`div.f-messagebox-alert`)
     await handleSubmit(page)
+
   })
-  // return new Promise(async (resolve) => {
-  //   resolve(true)
-  // })
+
 }
 
 let southDoor = async (page) => {
   // 常态化申请
-  const permissionB1 = await page.$('input#persinfo_XiZhi-inputEl')
-  await permissionB1.evaluate(b => b.click())
-  const otherPermissionBtns = await page.$$eval("input[id^=persinfo_ChengNuo]", doms => {
+  await page.$eval(`input[value='persinfo_XiZhi']`, dom => {
+    dom.click()
+  })
+
+
+  await page.$$eval("input[id^=persinfo_ChengNuo]", doms => {
     let visibleDoms = [];
     for (let i = 0; i < doms.length; i++) {
       let domRect = doms[i].getBoundingClientRect()
