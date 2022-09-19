@@ -134,7 +134,7 @@ const getReportList = async (page,browser) => {
   for (let i = willReportList.length - 1; i >= 0; i--) {
     const newPage = await browser.newPage();
     await newPage.goto(willReportList[i]).then(async () => {
-      await dayReportFun(newPage)
+      await dayReportFun(newPage,)
     });
 
   }
@@ -158,7 +158,7 @@ let login = async (page, accountName, accountPassword) => {
   })
 }
 
-let dayReport = (page) => {
+let dayReport = (page,browser) => {
   return new Promise(async (resolve, reject) => {
     // 每日一报
     const lbReport = await page.$(`a#lnkReport`);
