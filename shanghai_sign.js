@@ -188,6 +188,11 @@ let dayReport = (page) => {
 
     } else {
       await dayReportFun(page)
+      let currentHours = new Date().getHours();
+      if (currentHours < 10) {
+        // 每日一报
+        reject(false);
+      }
     }
     let currentUrl = page.url()
     if (currentUrl.includes(`https://selfreport.shu.edu.cn/Default.aspx`)) {
