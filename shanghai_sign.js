@@ -24,7 +24,19 @@ const dayReportFun = async (page) => {
   const promiseBtn = await page.$(`input#p1_ChengNuo-inputEl`);
   await promiseBtn.evaluate(b => b.click());
 
-  const is7DaysInSH = await page.$(`input#fineui_1-inputEl`);
+  // 新冠是否感染
+  const xinguangr = await page.$(`input[name='p1$P_QueZXX$CengQZ'][value=否]`)
+  if (xinguangr) {
+    await xinguangr.evaluate(b => b.click());
+  }
+
+  // 上传行程码
+  const xcm = await page.waitForSelector(`input[name='p1$P_GuoNei$pImages$fileXingCM']`)
+  if (xcm) {
+    await xcm.uploadFile("./lc.jpg")
+  }
+
+  const is7DaysInSH = await page.$(`input#fineui_3-inputEl`);
   await is7DaysInSH.evaluate(b => b.click());
 
   const inShangHaiBtn = await page.$(`input[value=在上海（校内）]`)
@@ -36,9 +48,9 @@ const dayReportFun = async (page) => {
   const riskArea = await page.$(`input[name='p1$GaoZDFXLJS'][value=无]`)
   await riskArea.evaluate(b => b.click());
 
-  const contiguityBtn = await page.$(`input#fineui_31-inputEl`)
+  const contiguityBtn = await page.$(`input[name='p1$QueZHZJC'][value=否]`)
   await contiguityBtn.evaluate(b => b.click())
-  const quarantineBtn = await page.$(`input#fineui_33-inputEl`)
+  const quarantineBtn = await page.$(`input[value='低']`)
   await quarantineBtn.evaluate(b => b.click())
 
 
@@ -46,6 +58,9 @@ const dayReportFun = async (page) => {
 
     const schoolAreaName = await page.$(`input[value=在上海（校内）]`)
     await schoolAreaName.evaluate(b => { if (!b.checked) b.click() });
+
+    const schoolName = await page.$(`input[value=延长]`)
+    await schoolName.evaluate(b => { if (!b.checked) b.click() });
 
     // 点击确定
     const submitReportBtn = await page.$(`a#p1_ctl01_btnSubmit`)
@@ -61,9 +76,10 @@ const dayReportFun = async (page) => {
 
 }
 
+
 let southDoor = async (page) => {
   // 常态化申请
-  await page.$eval(`input[value='persinfo_XiZhi']`, dom => {
+  await page.$eval(`input[value=persinfo_XiZhi]`, dom => {
     dom.click()
   })
 
