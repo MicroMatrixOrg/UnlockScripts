@@ -79,23 +79,26 @@ const dayReportFun = async (page) => {
 
 let southDoor = async (page) => {
   // 常态化申请
-  await page.$eval(`input[value=persinfo_XiZhi]`, dom => {
-    dom.click()
+  await page.waitForSelector(`input[value=persinfo_XiZhi]`).then(async () => {
+    await page.$eval(`input[value=persinfo_XiZhi]`, dom => {
+      dom.click()
+    })
   })
+  await page.waitForSelector(`input[id^=persinfo_ChengNuo]`).then(async () => {
+    await page.$$eval("input[id^=persinfo_ChengNuo]", doms => {
+      let visibleDoms = [];
+      for (let i = 0; i < doms.length; i++) {
+        let domRect = doms[i].getBoundingClientRect()
+        if (domRect.x == 0 && domRect.y == 0 && domRect.width == 0 && domRect.height == 0) {
 
-
-  await page.$$eval("input[id^=persinfo_ChengNuo]", doms => {
-    let visibleDoms = [];
-    for (let i = 0; i < doms.length; i++) {
-      let domRect = doms[i].getBoundingClientRect()
-      if (domRect.x == 0 && domRect.y == 0 && domRect.width == 0 && domRect.height == 0) {
-
-      } else {
-        doms[i].click()
-        visibleDoms.push(doms[i])
+        } else {
+          doms[i].click()
+          visibleDoms.push(doms[i])
+        }
       }
-    }
-    return visibleDoms
+      return visibleDoms
+    })
+
   })
   const copyA = await page.$('a#persinfo_ctl01_btnCopy')
   await copyA.evaluate(b => b.click())
