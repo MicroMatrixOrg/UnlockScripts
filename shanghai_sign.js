@@ -106,7 +106,7 @@ let southDoor = async (page) => {
     const alertBtn = await page.$(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`)
     await alertBtn.evaluate(b => b.click())
   })
-
+  await page.waitFor(2000);
 
   await page.$eval(`input#persinfo_JinCRQ-inputEl`, el => {
     let today = new Date();
