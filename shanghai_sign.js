@@ -104,7 +104,7 @@ let southDoor = async (page) => {
   await copyA.evaluate(b => b.click())
   await page.waitForSelector(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`).then(async () => {
     const alertBtn = await page.$(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`)
-    await alertBtn.click()
+    await alertBtn.evaluate(b => b.click())
   })
 
 
