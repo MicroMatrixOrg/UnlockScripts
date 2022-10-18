@@ -40,6 +40,18 @@ function exchangeFigt (token) {
   })
 }
 
+function getScoreOrder(token,body){
+  return new Promise(async (resolve, reject) => {
+    let url = `https://fscrm.kraftheinz.net.cn/crm/public/index.php/api/v1/getScoreOrder`
+    let body = ``
+    let urlObject = populateUrlObject(url, token, body)
+    await httpRequest('post', urlObject)
+    let result = httpResult;
+    console.log(result ? result.msg : "")
+    resolve(true)
+  })
+}
+
 async function httpRequest (method, url) {
   httpResult = null
   if (method == 'post') {
@@ -107,6 +119,7 @@ function populateUrlObject (url, token, body = '') {
   return urlObject;
 }
 
+
 async function main () {
   for (let i = 0; i < tokenList.length; i++) {
     let token = tokenList[i]
@@ -114,6 +127,8 @@ async function main () {
     await sign(token);
     await traceEvent(token, "type=page_view&trace_value=%23%2Fpages%2Frewardshop%2Findex&trace_detail=%E7%A7%AF%E5%88%86%E5%95%86%E5%9F%8E%E9%A1%B5%E9%9D%A2");
     await exchangeFigt(token)
+    await traceEvent(token,"type=page_view&trace_value=%23%2Fpages%2Frewardhistory%2Findex&trace_detail=%E5%85%91%E6%8D%A2%E5%8E%86%E5%8F%B2")
+    await getScoreOrder(token)
   }
 
 }
