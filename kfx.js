@@ -48,6 +48,12 @@ function getScoreOrder(token,body){
     await httpRequest('post', urlObject)
     let result = httpResult;
     console.log(result ? result.data : "")
+    let respData = result.data.data;
+    let cards = []
+    for(let i = 0; i < respData.length; i++){
+      card.push(respData[i].cards.card)
+    }
+    await notify.sendNotify(`卡数据`, `${cards}`)
     resolve(true)
   })
 }
