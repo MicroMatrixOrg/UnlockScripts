@@ -51,7 +51,7 @@ function getScoreOrder(token,body){
     let respData = result.data.data;
     let cards = []
     for(let i = 0; i < respData.length; i++){
-      cards.push(respData[i].awardResult.cards.card)
+      cards.push(respData[i].awardResult)
     }
     await notify.sendNotify(`卡数据`, `${cards}`)
     resolve(true)
