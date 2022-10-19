@@ -100,13 +100,6 @@ let southDoor = async (page) => {
     })
 
   })
-  const copyA = await page.$('a#persinfo_ctl01_btnCopy')
-  await copyA.evaluate(b => b.click())
-  await page.waitForSelector(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`).then(async () => {
-    const alertBtn = await page.$(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`)
-    await alertBtn.evaluate(b => b.click())
-  })
-  await page.waitFor(2000);
 
   await page.$eval(`input#persinfo_JinCRQ-inputEl`, el => {
     let today = new Date();
@@ -114,22 +107,55 @@ let southDoor = async (page) => {
     let tomorrow = today.getFullYear() + `-` + (today.getMonth() + 1) + `-` + today.getDate();
     el.value = tomorrow
   })
-  const submitConfirmCTH = await page.$(`a#persinfo_ctl01_btnSubmit`);
-  await submitConfirmCTH.click()
 
-
+  const copyA = await page.$('a#persinfo_ctl01_btnCopy')
+  await copyA.evaluate(b => b.click())
   await page.waitForSelector(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`).then(async () => {
-    const errorInnerHtml = await page.$eval(`.f-messagebox-message`, el => {
-      if (el.innerHTML.startsWith(`无72小时内有效的采样信息`)) {
-        return el.innerHTML;
+    await page.$$eval(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`, doms => {
+      for (let i = 0; i < doms.length; i++) {
+        if (doms[i].innerText.includes("确定")) {
+          doms[i].click();
+        }
       }
     })
-    const alertBtn = await page.$(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`)
-    await alertBtn.click()
-    if (errorInnerHtml) {
-      sendMessage(errorInnerHtml)
-    }
+
+  }).then(async () => {
+    const inDate = await page.$(`input[name='persinfo$JinXSJD'][value='8:00-12:00']`)
+    await inDate.evaluate(b => b.click());
+
+    const inHospital = await page.$(`input[name='persinfo$QianWYLCS'][value='否']`)
+    await inHospital.evaluate(b => b.click());
+
+
+
+
+    const jcYc = await page.$(`input[name='persinfo$JinChu_YC'][value='persinfo_JinChu_YC']`)
+    await jcYc.evaluate(b => b.click());
+
+    const vehicle = await page.$(`input[name='persinfo$JiaoTGJ'][value='其它交通工具']`)
+    await vehicle.evaluate(b => b.click());
+
+    const whatKindOfVehicle = await page.$(`textarea[name='persinfo$QiTJTGJ']`)
+    await whatKindOfVehicle.type("自行车")
+
+
+    const submitConfirmCTH = await page.$(`a#persinfo_ctl01_btnSubmit`);
+    await submitConfirmCTH.click()
   })
+
+
+  // await page.waitForSelector(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`).then(async () => {
+  //   const errorInnerHtml = await page.$eval(`.f-messagebox-message`, el => {
+  //     if (el.innerHTML.startsWith(`无72小时内有效的采样信息`)) {
+  //       return el.innerHTML;
+  //     }
+  //   })
+  //   const alertBtn = await page.$(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`)
+  //   await alertBtn.evaluate(b => b.click());
+  //   if (errorInnerHtml) {
+  //     sendMessage(errorInnerHtml)
+  //   }
+  // })
 
 }
 
