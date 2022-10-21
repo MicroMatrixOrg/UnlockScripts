@@ -159,7 +159,7 @@ let southDoor = async (page) => {
 
 }
 
-const getReportList = async (page,browser) => {
+const getReportList = async (page, browser) => {
   await page.waitForNavigation({
     waitUntil: `load`,
   })
@@ -203,7 +203,7 @@ let login = async (page, accountName, accountPassword) => {
   })
 }
 
-let dayReport = (page,browser) => {
+let dayReport = (page, browser) => {
   return new Promise(async (resolve, reject) => {
     // 每日一报
     const lbReport = await page.$(`a#lnkReport`);
@@ -228,7 +228,7 @@ let dayReport = (page,browser) => {
       await page.waitForSelector(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`).then(async () => {
         const alertBtns = await page.$$(`a[role=button][id^='fineui_'] > span.f-btn-inner > span.f-btn-text`)
         await alertBtns[1].click();
-        await getReportList(page,browser)
+        await getReportList(page, browser)
       })
 
     } else {
@@ -262,20 +262,20 @@ let main = async () => {
     let temAccount = accounts[i].split("&")
     let username = temAccount[0];
     let password = temAccount[1];
-//     const browser = await puppeteer.launch({ devtools: true });
-    const browser = await puppeteer.launch({ executablePath: '/usr/bin/chromium-browser', args: [ '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote' ] });
+    //     const browser = await puppeteer.launch({ devtools: true });
+    const browser = await puppeteer.launch({ executablePath: '/usr/bin/chromium-browser', args: ['--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote'] });
     const page = await browser.newPage();
     console.log("开始签到", username)
     await login(page, username, password);
     // 进入每日一报
-    let result = await dayReport(page,browser);
+    let result = await dayReport(page, browser);
     if (result) {
       if (page.url().includes("JiaoZGJCSQ_List.aspx")) {
         await page.waitForSelector("a[id=p1_ctl00]").then(async () => {
           const toSouthDoor = await page.$("a[id=p1_ctl00]")
           await toSouthDoor.click()
           await page.waitForNavigation({
-            waitUntil: `load`,
+            waitUntil: `domcontentloaded`,
           })
           await southDoor(page)
         })
