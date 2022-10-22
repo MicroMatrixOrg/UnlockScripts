@@ -5,6 +5,8 @@ const token = $.isNode() ? process.env.kfxtoken : ""
 const tokenList = token.split("&")
 const logDebug = 0
 
+let cardsMsg = []
+
 function sign (token) {
   return new Promise(async (resolve, reject) => {
     let url = `https://fscrm.kraftheinz.net.cn/crm/public/index.php/api/v1/dailySign`
@@ -48,12 +50,15 @@ function getScoreOrder(token,body){
     await httpRequest('post', urlObject)
     let result = httpResult;
 //     console.log(result ? result.data : "")
-    let respData = result.data.data;
+    let respData = result?.data.data;
     let cards = []
-    for(let i = 0; i < respData.length; i++){
-      cards.push(respData[i].awardResult)
+    for(let i = 0; i < respData?.length; i++){
+      let temObj = JSON.parse(respData[i].awardResult)
+      cards.push(temObj.cards.card)
+     
     }
-    await notify.sendNotify(`卡数据`, `${cards}`)
+    cardsMsg.push(cards)
+    
     resolve(true)
   })
 }
@@ -141,6 +146,9 @@ async function main () {
     }
 
   }
+  console.log(cardsMsg)
+
+  await notify.sendNotify(`卡数据`, `${JSON.stringify(cardsMsg)}`)
 
 }
 
