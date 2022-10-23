@@ -32,7 +32,7 @@ const dayReportFun = async (page) => {
   // 上传行程码
   const xcm = await page.waitForSelector(`input[name='p1$P_GuoNei$pImages$fileXingCM']`)
   if (xcm) {
-    await xcm.uploadFile("./lc.jpg")
+    await xcm.uploadFile("/ql/data/repo/Stonewalling_my_scripts/lc.jpg")
   }
 
   const is7DaysInSH = await page.$(`input#fineui_3-inputEl`);
