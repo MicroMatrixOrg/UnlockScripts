@@ -63,14 +63,19 @@ function Talk(token,text){
             }else{
                 try{
                     let msgText = data.choices[0].text;
-                    const blocks = splitCode(msgText)
-                    console.log(blocks)
+                    console.log(msgText)
+                    let blocks = splitParagraph(msgText);
                     for(let i = 0; i < blocks.length; i++){
-                        // sleep(500).then(() => {
-                        //     s.reply(blocks[i]);
-                        // })
                         s.listen(100);
-                        s.reply(blocks[i]);
+                        let lastCharIndex = lastEnChar(blocks[i]);
+                                 
+                        if(lastCharIndex > 0){                  
+                          s.reply(blocks[i].substring(0,lastCharIndex));
+                        }else{
+                          console.log(blocks[i].length,lastCharIndex)
+                          s.reply(blocks[i]);
+                        }
+                        
                     }
                 }
                 catch(err){
@@ -158,16 +163,47 @@ function GetModels(token){
 	}
 }
 
-function splitCode(code) {
+// function splitCode(code) {
+//   // Define a regular expression that matches any of the specified delimiters
+//   const regex = new RegExp(`[.!;}]|\\b`, 'g');
+//   // Split the code into an array of individual lines
+//   let lines = code.split(regex);
+
+//   // Initialize the blocks array and currentBlock string
+//   const blocks = [];
+//   let currentBlock = '';
+
+//   // Iterate over the lines of code
+//   for (const line of lines) {
+//     // Check if the current line can be added to the current block
+//     if (currentBlock.length + line.length <= 160) {
+//       // If it can, append the line to the current block
+//       currentBlock += line;
+//     } else {
+//       // If it cannot, add the current block to the blocks array and
+//       // reset the current block to the current line
+//       blocks.push(currentBlock + line[line.length - 1]);
+//       currentBlock = line;
+//     }
+//   }
+
+//   // After iterating over all lines, add the current block to the blocks array
+//   blocks.push(currentBlock);
+//   // Return the blocks array
+//   return blocks;
+// }
+
+function splitParagraph(code) {
+  // Define a parser function that checks the syntax of a statement
+  const parser = (code) => {
+    // Parse the code and check the syntax of the statement
+    // Return true if the statement is valid, false otherwise
+  };
+
+    const regex = new RegExp(`([.!;}]|\\b)`, 'g');
   // Split the code into an array of individual lines
-  let lines = ''
-  
-  if(code.includes('}')){
-      lines = code.split('}')
-  }else{
-      lines = code.split(/[.!]/)
-  }
-  console.log("lines",lines)
+  let lines = code.split(regex);
+
   // Initialize the blocks array and currentBlock string
   const blocks = [];
   let currentBlock = '';
@@ -175,31 +211,68 @@ function splitCode(code) {
   // Iterate over the lines of code
   for (const line of lines) {
     // Check if the current line can be added to the current block
-    if (currentBlock.length + line.length <= 199) {
+    if (currentBlock.length + line.length <= 170) {
       // If it can, append the line to the current block
       currentBlock += line;
+      // Set the merge flag to true
+      merge = true;
     } else {
       // If it cannot, add the current block to the blocks array and
       // reset the current block to the current line
-      if(code.includes('}')){
-        blocks.push(currentBlock + "}");
-      }else{
-          blocks.push(currentBlock);
-      }
+      blocks.push({ text: currentBlock + line[line.length - 1], merge: merge });
       currentBlock = line;
+      // Set the merge flag to false
+      merge = false;
     }
   }
 
   // After iterating over all lines, add the current block to the blocks array
-  blocks.push(currentBlock);
+  blocks.push({ text: currentBlock, merge: merge });
 
-  // Return the blocks array
-  return blocks;
+  // Initialize the result array
+  const result = [];
+  // Iterate over the blocks
+  for (let i = 0; i < blocks.length; i++) {
+    // If the current block is a valid statement,
+    // append it to the previous block
+    if (parser(blocks[i].text)) {
+      result[result.length - 1].text += blocks[i].text;
+    } else {
+      // Otherwise, add the current block to the result array
+      result.push(blocks[i]);
+    }
+  }
+
+  // Return the result array
+  return result.map(block => block.text);
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+function lastEnChar(str) {
+  var regex = /[a-zA-Z]/g;
+  var matches = str.match(regex);
+  if (matches) {
+    var lastMatch = matches[matches.length - 1];
+    var lastMatchIndex = str.lastIndexOf(lastMatch);
+    var lastSpecialCharIndex = -1;
+    for (var i = lastMatchIndex - 1; i >= 0; i--) {
+      if (/[\s\n\r]/.test(str[i])) {
+        lastSpecialCharIndex = i;
+        break;
+      }
+    }
+    var lastCharIndex = lastMatchIndex;
+    if (lastSpecialCharIndex > lastMatchIndex) {
+      // The last match is after a special character
+      lastCharIndex -= (lastSpecialCharIndex + 1);
+    }
+    // Check if there is any text after the last match
+    if (lastMatchIndex + lastMatch.length < str.length) {
+      return -1;
+    }
+    return lastCharIndex;
+  } else {
+    return -1;
+  }
 }
-
 
 main()
