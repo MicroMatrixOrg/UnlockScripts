@@ -30,7 +30,7 @@ const dayReportFun = async (page) => {
   }
 
   // 上传行程码
-  const xcm = await page.waitForSelector(`input[name='p1$P_GuoNei$pImages$fileXingCM']`)
+  const xcm = await page.$(`input[name='p1$P_GuoNei$pImages$fileXingCM']`)
   if (xcm) {
     await xcm.uploadFile("/ql/data/repo/Stonewalling_my_scripts/lc.jpg")
   }
@@ -45,12 +45,18 @@ const dayReportFun = async (page) => {
   await needGoSchoolBtn.evaluate(b => b.click())
 
   const riskArea = await page.$(`input[name='p1$GaoZDFXLJS'][value=无]`)
-  await riskArea.evaluate(b => b.click());
+  if(riskArea){
+    await riskArea.evaluate(b => b.click());
+  }
 
   const contiguityBtn = await page.$(`input[name='p1$QueZHZJC'][value=否]`)
-  await contiguityBtn.evaluate(b => b.click())
+  if(contiguityBtn){
+    await contiguityBtn.evaluate(b => b.click())
+  }
   const quarantineBtn = await page.$(`input[value='低']`)
-  await quarantineBtn.evaluate(b => b.click())
+  if(quarantineBtn){
+    await quarantineBtn.evaluate(b => b.click())
+  }
 
 
   await page.waitForSelector(`input[value=在上海（校内）]`, { visible: true }).then(async () => {
@@ -270,15 +276,15 @@ let main = async () => {
     if (result) {
       if (page.url().includes("JiaoZGJCSQ_List.aspx")) {
         await page.waitForSelector("a[id=p1_ctl00]").then(async () => {
-          const toSouthDoor = await page.$("a[id=p1_ctl00]")
-          await toSouthDoor.click()
-          await page.waitForNavigation({
-            waitUntil: `domcontentloaded`,
-          })
-          await southDoor(page)
+          // const toSouthDoor = await page.$("a[id=p1_ctl00]")
+          // await toSouthDoor.click()
+          // await page.waitForNavigation({
+          //   waitUntil: `domcontentloaded`,
+          // })
+          // await southDoor(page)
         })
       } else if (page.url().includes("/JiaoZGJCSQ.aspx")) {
-        await southDoor(page)
+        // await southDoor(page)
       }
       msg += `${username}上报成功 \n`
       console.log(`${username}上报成功`)
