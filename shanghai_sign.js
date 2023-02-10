@@ -45,16 +45,16 @@ const dayReportFun = async (page) => {
   await needGoSchoolBtn.evaluate(b => b.click())
 
   const riskArea = await page.$(`input[name='p1$GaoZDFXLJS'][value=无]`)
-  if(riskArea){
+  if (riskArea) {
     await riskArea.evaluate(b => b.click());
   }
 
   const contiguityBtn = await page.$(`input[name='p1$QueZHZJC'][value=否]`)
-  if(contiguityBtn){
+  if (contiguityBtn) {
     await contiguityBtn.evaluate(b => b.click())
   }
   const quarantineBtn = await page.$(`input[value='低']`)
-  if(quarantineBtn){
+  if (quarantineBtn) {
     await quarantineBtn.evaluate(b => b.click())
   }
 
@@ -259,14 +259,14 @@ let dayReport = (page, browser) => {
 let main = async () => {
   const $ = new Env('上海大学签到');
   let accounts = process.env.signAccount.split(",")
-//   let accounts = "k1000342&SHhy123456".split(",")
+  //   let accounts = "k1000342&SHhy123456".split(",")
   let msg = ""
   for (let i = 0; i < accounts.length; i++) {
     let temAccount = accounts[i].split("&")
     let username = temAccount[0];
     let password = temAccount[1];
-//     const browser = await puppeteer.launch({ devtools: true });
-    const browser = await puppeteer.launch({ executablePath: '/usr/bin/chromium-browser', args: [ '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote' ] });
+    //     const browser = await puppeteer.launch({ devtools: true });
+    const browser = await puppeteer.launch({ executablePath: '/usr/bin/chromium-browser', args: ['--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote'] });
     const page = await browser.newPage();
     console.log("开始签到", username)
     await login(page, username, password);
