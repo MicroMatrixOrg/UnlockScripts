@@ -1,0 +1,29 @@
+﻿{
+  "_Comment": {
+    "Base64 Encoding/Decoding": "https://www.base64encode.org/"
+  },
+  "Accounts": [
+    {
+      "Username": "you@domain.com",
+      "Password": "your_password"
+    },
+    {
+      "Username": "you2@domain.com",
+      "Password": "your_password",
+      "OTP": "ABC123DEF456GH78"
+    },
+    {
+      "Username": "you2@domain.com",
+      "Password": "eW91cl9wYXNzd29yZA==",
+      "OTP": "QUJDMTIzREVGNDU2R0g3OA==",
+      "Encoding": "Base64"
+    }
+  ],
+  "Webhook": [
+    {
+      "Who": "Discord",
+      "Where": "https://discord.com/api/webhooks/{webhook.id}/{webhook.token}",
+      "What": "Summary"
+    }
+  ]
+}
