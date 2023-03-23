@@ -1,7 +1,7 @@
 /*
 微信阅读
 需要青龙环境
-入口，微信打开 -> https://zl1208224800-1314804847.cos.ap-nanjing.myqcloud.com/index.html?upuid=10327150
+入口，微信打开 -> https://zl0321224306-1316423829.cos.ap-nanjing.myqcloud.com/index.html?upuid=10943169
 抓包m.*.work域名下cookie,填入环境变量 yuedu，多账户换行隔开
 抓包User-Agent填入变量 ydua
 
