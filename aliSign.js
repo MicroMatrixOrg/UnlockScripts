@@ -6,10 +6,8 @@
 
 const updateAccesssTokenURL = "https://auth.aliyundrive.com/v2/account/token"
 const signinURL = "https://member.aliyundrive.com/v1/activity/sign_in_list"
-const refreshToeknArry = [
-    "",
-    ""
-    ]
+const refreshToekn = $.isNode() ? process.env.alitoken : ""
+const refreshToeknArry = refreshToekn.split("&")
 
 const fetch = require("node-fetch")
 const notify = require('./sendNotify');
